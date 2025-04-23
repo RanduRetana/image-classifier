@@ -27,7 +27,7 @@ Inicialmente, las imágenes de Ronaldo tenían un sesgo importante: **todas most
 ## Modelo Utilizado
 
 
-### Modelo Inicial
+### Modelo Inicial (V1.0)
 
 Se comenzó con una CNN simple con tres capas convolucionales y una capa densa final:
 Input: Imagen RGB de 128x128 ↓ Conv2D (32) → ReLU ↓ Conv2D (64) → ReLU ↓ Conv2D (128) → ReLU ↓ Flatten ↓ Dense (128) → ReLU ↓ Dense (3) → Softmax
@@ -35,11 +35,13 @@ Input: Imagen RGB de 128x128 ↓ Conv2D (32) → ReLU ↓ Conv2D (64) → ReLU �
 
 Este modelo sirvió como primera aproximación, pero presentaba limitaciones en capacidad de generalización y requería muchas épocas para converger. Además, no incluía técnicas de regularización como MaxPooling o Dropout.
 
+En esta versión, tras 150 epochs, se alcanzaba una accuracy de 0.7824, con loss de 199.0584, resultados que evidencian una arquitectura sencilla y con un gran margen de mejora.
+
 ---
 
-### 🚀 Modelo Mejorado (Inspirado en AlexNet)
+### Modelo Mejorado (V2.0) (Inspirado en AlexNet)
 
-Basado en el análisis del paper ["ImageNet Classification with Deep Convolutional Neural Networks" (Krizhevsky et al., 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf), se rediseñó el modelo incorporando elementos clave de **AlexNet**, como MaxPooling y Dropout.
+Basado en el análisis del paper ["ImageNet Classification with Deep Convolutional Neural Networks" (Krizhevsky et al., 2012)](https://papers.nips.cc/paper_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf), se rediseñó el modelo incorporando elementos clave de **AlexNet**, como MaxPooling y Dropout, además, el tamaño de las imágenes se cambió a 224x224.
 
 ```python
 model = Sequential()
@@ -59,16 +61,18 @@ model.add(Dropout(0.5))
 
 model.add(Dense(3, activation='softmax'))
 ```
-Este rediseño mejoró significativamente la precisión y redujo la cantidad de épocas necesarias para converger. En solo 40 épocas, el nuevo modelo logró un rendimiento mucho mayor que el modelo original.
+Este rediseño mejoró significativamente la precisión y redujo la cantidad de épocas necesarias para converger. En solo 70 épocas, el nuevo modelo logró un rendimiento mucho mayor que el modelo original, alcanzando una accuracy de 0.8705 y loss de 0.45
 
 El artículo de Krizhevsky et al. sirvió como justificación teórica para el uso de arquitecturas profundas, ReLU como función de activación, y técnicas de regularización como Dropout y MaxPooling. La arquitectura AlexNet demostró ser altamente efectiva en clasificación de imágenes a gran escala, validando nuestro enfoque.
 
 ---
 
+### Modelo Mejorado Con Transfer Learning (V3.0)
+
 ### Generación de Datos de Entrenamiento y Testeo
 Se utilizaron generadores de imágenes con ImageDataGenerator de Keras para:
 
-- Redimensionar imágenes a 128x128 px
+- Redimensionar imágenes a 224x224 px
 
 - Normalizar valores de píxeles
 
