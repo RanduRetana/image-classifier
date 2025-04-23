@@ -5,7 +5,9 @@
 
 Este proyecto tiene como objetivo entrenar un modelo de deep learning capaz de clasificar imágenes de tres personas: **Cristiano Ronaldo**, **Maria Sharapova** y **Kobe Bryant**. A través de redes neuronales convolucionales (CNN), buscamos que el modelo identifique a cada individuo a pesar de variaciones como ropa, fondo y pose.
 
-Durante el desarrollo, se identificaron **problemas de sesgo visual** en el dataset inicial, lo que motivó modificaciones en la base de datos y el modelo utilizado.
+Uno de los principales **retos** fue trabajar con un **dataset limitado**, tanto en cantidad como en diversidad de imágenes. A diferencia de enfoques como el de **AlexNet**, que fue entrenado con millones de imágenes (ImageNet), **nuestro objetivo es lograr alta precisión utilizando una base de datos pequeña y recursos computacionales reducidos**.
+
+Durante el desarrollo, se identificaron problemas de **sesgo visual** en el dataset inicial, lo que motivó ajustes en la base de datos y mejoras progresivas en el modelo.
 
 ---
 
@@ -24,13 +26,22 @@ Inicialmente, las imágenes de Ronaldo tenían un sesgo importante: **todas most
 
 ---
 
-## Modelo Utilizado
+## Evolución del modelo
 
 
 ### Modelo Inicial (V1.0)
 
-Se comenzó con una CNN simple con tres capas convolucionales y una capa densa final:
-Input: Imagen RGB de 128x128 ↓ Conv2D (32) → ReLU ↓ Conv2D (64) → ReLU ↓ Conv2D (128) → ReLU ↓ Flatten ↓ Dense (128) → ReLU ↓ Dense (3) → Softmax
+Una CNN simple con tres capas convolucionales y una capa densa final:
+
+
+Input: Imagen RGB de 128x128
+↓ Conv2D (32) → ReLU
+↓ Conv2D (64) → ReLU
+↓ Conv2D (128) → ReLU
+↓ Flatten
+↓ Dense (128) → ReLU
+↓ Dense (3) → Softmax
+
 
 
 Este modelo sirvió como primera aproximación, pero presentaba limitaciones en capacidad de generalización y requería muchas épocas para converger. Además, no incluía técnicas de regularización como MaxPooling o Dropout.
@@ -61,13 +72,26 @@ model.add(Dropout(0.5))
 
 model.add(Dense(3, activation='softmax'))
 ```
-Este rediseño mejoró significativamente la precisión y redujo la cantidad de épocas necesarias para converger. En solo 70 épocas, el nuevo modelo logró un rendimiento mucho mayor que el modelo original, alcanzando una accuracy de 0.8705 y loss de 0.45
+Este rediseño mejoró significativamente la precisión y redujo la cantidad de épocas necesarias para converger. En 100 épocas, el nuevo modelo logró un rendimiento mucho mayor que el modelo original, alcanzando una accuracy de 0.8705 y loss de 0.45
 
 El artículo de Krizhevsky et al. sirvió como justificación teórica para el uso de arquitecturas profundas, ReLU como función de activación, y técnicas de regularización como Dropout y MaxPooling. La arquitectura AlexNet demostró ser altamente efectiva en clasificación de imágenes a gran escala, validando nuestro enfoque.
 
 ---
 
 ### Modelo Mejorado Con Transfer Learning (V3.0)
+
+Para la tercera versión, se utilizó MobileNetV2, una arquitectura ligera optimizada para eficiencia, basada en el paper:
+[Sandler, Mark, et al. "MobileNetV2: Inverted Residuals and Linear Bottlenecks" (CVPR 2018)]
+
+Se congelaron las capas convolucionales preentrenadas en ImageNet y se añadieron capas densas personalizadas para nuestro problema de tres clases.
+
+Resultados con esta versión (tras 40 épocas):
+
+Accuracy: 0.9389
+
+Loss: 0.2555
+
+Gracias al uso de transfer learning, se logró mejorar el rendimiento sin necesidad de grandes volúmenes de datos.
 
 ### Generación de Datos de Entrenamiento y Testeo
 Se utilizaron generadores de imágenes con ImageDataGenerator de Keras para:
