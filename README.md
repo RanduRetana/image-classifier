@@ -187,9 +187,9 @@ Del análisis de estas métricas podemos derivar varias conclusiones importantes
 
 Estos resultados confirman la hipótesis central de nuestro trabajo: con datasets pequeños y mediante transfer learning, es posible lograr excelentes resultados sin necesidad de arquitecturas extremadamente complejas. MobileNetV2 emerge como la elección óptima para nuestro clasificador, combinando alta precisión con eficiencia computacional.
 
-![alt text](image.png)
+![alt text](screenshots/image.png)
 
-![alt text](image-1.png)
+![alt text](screenshots/image-1.png)
 
 ---
 
