@@ -6,7 +6,7 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-model = load_model("model_v3_3.h5")
+model = load_model("model_v3_mobilenet.h5")
 classes = ["Kobe Bryant", "Maria Sharapova", "Cristiano Ronaldo"]
 
 def prepare_image(img_path):
