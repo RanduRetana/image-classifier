@@ -68,7 +68,7 @@ Estas técnicas fueron cruciales para aumentar artificialmente nuestro dataset l
 
 La primera implementación consistió en una CNN básica con tres capas convolucionales y una capa densa final:
 
-
+```
 Input: Imagen RGB de 128x128
 ↓ Conv2D (32) → ReLU
 ↓ Conv2D (64) → ReLU
@@ -76,7 +76,7 @@ Input: Imagen RGB de 128x128
 ↓ Flatten
 ↓ Dense (128) → ReLU
 ↓ Dense (3) → Softmax
-
+```
 
 
 Este modelo sirvió como primera aproximación, pero presentaba limitaciones en capacidad de generalización y requería muchas épocas para converger. Además, no incluía técnicas de regularización como MaxPooling o Dropout.
@@ -91,6 +91,7 @@ Se optó por no incluir el código correspondiente a este modelo en el notebook 
 
 Basado en el análisis del paper "ImageNet Classification with Deep Convolutional Neural Networks" (Krizhevsky et al., 2012), se rediseñó el modelo incorporando elementos clave de AlexNet, como MaxPooling y Dropout:
 
+```
 Input: Imagen RGB de 224x224
 ↓ Conv2D (64) → ReLU
 ↓ MaxPooling2D
@@ -101,6 +102,7 @@ Input: Imagen RGB de 224x224
 ↓ Flatten
 ↓ Dense (512) → ReLU → Dropout (0.5)
 ↓ Dense (3) → Softmax
+```
 
 Este rediseño mejoró significativamente la precisión y redujo la cantidad de épocas necesarias para converger. En 100 épocas, el nuevo modelo logró un rendimiento mucho mayor que el modelo original, alcanzando una accuracy de 0.8705 y loss de 0.45
 
@@ -111,14 +113,14 @@ El artículo de Krizhevsky et al. sirvió como justificación teórica para el u
 ### Modelo con Transfer Learning - MobileNetV2 (V3.0)
 
 Para la tercera versión, se implementó transfer learning con MobileNetV2, una arquitectura ligera y eficiente:
-
+```
 Input: Imagen RGB de 224x224
 ↓ MobileNetV2 (preentrenado en ImageNet, congelado)
 ↓ GlobalAveragePooling2D
 ↓ Dense (256) → ReLU → Dropout (0.5)
 ↓ Dense (3) → Softmax
 El entrenamiento se realizó en dos fases:
-
+```
 - Fase inicial: Con la base MobileNetV2 congelada, entrenamos solo las capas superiores personalizadas durante 10 épocas.
 - Fine-tuning: Descongelamos las últimas 20 capas de MobileNetV2 y reentrenamos con una tasa de aprendizaje muy baja (1e-5) durante otras 10 épocas.
 
@@ -127,14 +129,14 @@ Esta implementación logró una accuracy de 0.9389 con una loss de 0.1964, demos
 
 ### Modelo con Transfer Learning - ResNet50 (V4.0)
 Para nuestra implementación final, utilizamos ResNet50, una arquitectura que introdujo conexiones residuales para resolver el problema de la degradación del gradiente en redes muy profundas (He et al., 2016):
-
+```
 Input: Imagen RGB de 224x224
 ↓ ResNet50 (preentrenado en ImageNet, congelado inicialmente)
 ↓ GlobalAveragePooling2D
 ↓ Dense (512) → ReLU → Dropout (0.4)
 ↓ Dense (256) → ReLU → Dropout (0.3)
 ↓ Dense (3) → Softmax
-
+```
 Al igual que con MobileNetV2, implementamos una estrategia de entrenamiento en dos fases:
 
 - Fase inicial (15 épocas): Entrenamiento con la base ResNet50 completamente congelada.
